@@ -11,7 +11,7 @@ import java.util.Locale;
 
 public class DataHelper {
 
-    private static  Faker faker = new Faker(new Locale("en"));
+    private static Faker faker = new Faker(new Locale("en"));
 
     private DataHelper() {
     }
@@ -47,14 +47,6 @@ public class DataHelper {
     public static class VerificationCode {
         String code;
     }
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class AuthCode {
-        private String id;
-        private String user_id;
-        private String code;
-        private String created;
-    }
+
 }
 

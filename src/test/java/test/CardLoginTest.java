@@ -13,9 +13,10 @@ import static data.SQLHelper.cleanDatabase;
 
 public class CardLoginTest {
     @AfterAll
-    static void wipeOut(){
+    static void wipeOut() {
         cleanDatabase();
     }
+
     @Test
     @DisplayName("Should successfully login to dashboard with exist login and password from SUT test data")
     void shouldSuccessfulLogin() {
@@ -26,4 +27,26 @@ public class CardLoginTest {
         var verificationCode = SQLHelper.getVerificationCode();
         verificationPage.validVerify(verificationCode.getCode());
     }
+
+    @Test
+    @DisplayName("Should shows error notification if user not exist in database")
+    void shouldNotLoginRandomUser() {
+        var loginPage = open("http://localhost:9999", LoginPage.class);
+        var authData = DataHelper.generateRandomUser();
+        loginPage.validLogin(authData);
+        loginPage.verifyErrorNotificationVisibility();
+    }
+
+    @Test
+    @DisplayName("Should shows error notification if existing user from data with random verification code")
+    void shouldShowsErrorNotificationIlLoginWithRandomVerificationCode() {
+        var loginPage = open("http://localhost:9999", LoginPage.class);
+        var authData = DataHelper.getAuthInfo();
+        var verificationPage = loginPage.validLogin(authData);
+        verificationPage.verificationPageVisibility();
+        var verificationCode = DataHelper.generateRandomVerificationCode();
+        verificationPage.verify(verificationCode.getCode());
+        verificationPage.errorNotificationVisibility();
+    }
 }
+
